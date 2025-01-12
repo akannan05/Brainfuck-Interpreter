@@ -3,6 +3,8 @@
 #include<sstream>
 #include<string>
 
+#include "headers/eval.h"
+
 void fileProcess(std::string path){
     std::ifstream file(path);
     if(!file){
@@ -10,10 +12,19 @@ void fileProcess(std::string path){
         return;
     }
 
-    std::string line;
+    int* arr = init_brainfuck_system(30000);
 
-    while(std::getline(file, line))
-        std::cout << line << std::endl;
+    std::string fullcode, line;
+
+    while(std::getline(file, line)){
+        std::string s = clean_bf(line);
+        fullcode += s;
+    }
+
+    std::string output = iter_eval(arr, 30000, fullcode);
+    std::cout << output << std::endl;
+
+    delete[] arr;
 
     return;
 }
