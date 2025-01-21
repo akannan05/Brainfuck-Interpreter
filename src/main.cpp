@@ -22,7 +22,7 @@ void fileProcess(std::string path){
     }
 
     std::string output = iter_eval(arr, 30000, fullcode);
-    std::cout << output << std::endl;
+    std::cout << output;
 
     delete[] arr;
 
@@ -46,7 +46,7 @@ int main(){
         if(s == "q" || s == "Q")
             break;
 
-        std::cout << s << std::endl;
+        std::cout << s ;
     }
 
     return 0;

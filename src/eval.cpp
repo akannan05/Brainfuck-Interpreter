@@ -1,7 +1,7 @@
 #include "headers/eval.h"
 
 int* init_brainfuck_system(size_t size){
-    return new int[size];
+    return new int[size]();
 }
 
 std::string clean_bf(std::string s){
@@ -27,43 +27,50 @@ std::string iter_eval(int* arr, size_t size, std::string s){
                 output += c;
                 break;
             case '+':
-                if(arr[idx] >= 255)
-                    std::cerr << "WARNING: A Memory Cell Has a Value Over 255. Ignore if this is intentional." << std::endl;
                 arr[idx]++;
                 break;
             case '-':
-                if(arr[idx] <= 0)
-                    std::cerr << "WARNING: A Memory Cell Has a Value Under 0. Ignore if this is intentional." << std::endl;
                 arr[idx]--;
                 break;
             case '>':
-                if(idx >= size){
-                    std::cerr << "Out of Bounds Memory Access." << std::endl;
-                    break;
-                }    
                 idx++;
                 break;
             case '<':
-                if(idx <= 0){
-                    std::cerr << "Out of Bounds Memory Access." << std::endl;
-                    break;
-                }
                 idx--;
                 break;
-            case '[':
-                if(arr[idx] != 0)
-                    break;
-                while(s[i] != ']')
+            case '[': {
+                if(arr[idx] != 0) break;
+                int depth = 1;
+                while(depth > 0 && i < s.size() - 1){
                     i++;
-                i++;
+                    switch(s[i]){
+                        case '[':
+                            depth++;
+                            break;
+                        case ']':
+                            depth--;
+                            break;
+                    }
+                }
                 break;
-            case ']':
+            }
+            case ']': {
                 if(arr[idx] == 0)
                     break;
-                while(s[i] != '[')
+                int depth2 = 1;
+                while(depth2 > 0 && i > 0){
                     i--;
-                i++;
+                    switch(s[i]){
+                        case '[':
+                            depth2--;
+                            break;
+                        case ']':
+                            depth2++;
+                            break;
+                    }
+                }
                 break;
+            }
         }
     }
 
